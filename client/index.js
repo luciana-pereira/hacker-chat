@@ -7,6 +7,6 @@ import CliConfig from "./src/cliConfig.js";
 const [nodePath, filePath, ...commands] = process.argv;
 const config = CliConfig.parseArguments(commands)
 console.log('config', config)
-const componentEmitter = new Events()
+const componentEmitter = new Events();
 // const controller = new TerminalController();
 // await controller.initializeTable(componentEmitter);
