@@ -6,3 +6,5 @@ export const constants = {
         UPDATE_USERS: 'updateUsers'
     }
 }
+
+export default constants;

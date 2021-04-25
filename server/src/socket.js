@@ -1,6 +1,6 @@
 import http from 'http';
 import { v4 } from 'uuid';
-import { constants } from '../../client/src/constants.js';
+import { constants } from './constants.js';
 export default class SocketServer {
     constructor({ port }) {
         this.port = port;

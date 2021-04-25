@@ -9,12 +9,23 @@ export default class Controller {
         const userData = { id, socket }
         this.#updateGlobalUserData(id, userData)
 
-        socket.on('data')
-        // socket.on('error')
-        // socket.on('end')
+        socket.on('data', this.#onSocketData(id))
+        socket.on('error', this.#onSocketClosed(id))
+        socket.on('end', this.#onSocketClosed(id))
     }
 
-    #onSocketData(id) {}
+    #onSocketClosed(id) {
+        return data => {
+            console.log('onSocketClosed', data.toString())
+        }
+    }
+
+    #onSocketData(id) {
+        return data => {
+            console.log('onSocketData', data.toString())
+        }
+    }
+
     #updateGlobalUserData(socketId, userData) {
         const users = this.#users
         const user = users.get(socketId) ?? {}
@@ -25,6 +36,6 @@ export default class Controller {
         }
 
         users.set(socketId, updateUserData)
-        return user.get(socketId)
+        return users.get(socketId)
     }
 }
