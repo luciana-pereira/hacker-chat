@@ -1,9 +1,29 @@
+import Event from 'events';
 export default class SocketClient {
     #serverConnection = {};
+    #serverListener = new Event()
+
     constructor({ host, port, protocol }) {
         this.host = host;
         this.port = port;
         this.protocol = protocol;
+    }
+
+    sendMessage(event, message) {
+        this.#serverConnection.write(JSON.stringify({ event, message }))
+    }
+
+    attachEvents() {
+        this.#serverConnection.on('data', data => {
+                data
+                .toString()
+                .split('\n')
+                .filter(line => !!line)
+                .map(JSON.parse)
+                .map(({ event, message }) =>  {
+                    this.#serverListener.emit(event, message)
+                })
+        })
     }
 
     async createConnection() {

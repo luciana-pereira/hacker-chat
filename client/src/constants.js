@@ -6,6 +6,9 @@ export const constants = {
             ACTIVITTLOG_UPDATE: 'actyvitLog: updated',
             STATUS_UPDATE: 'status: updated'
         },
-        socket: {},
+        socket: {
+            JOIN_ROOM: 'joinRoom',
+            MESSAGE: 'message'
+        },
     }
 }
