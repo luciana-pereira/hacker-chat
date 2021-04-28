@@ -19,6 +19,21 @@ export default class EventManager {
         connectedUsers.forEach(({ id, userName }) => this.#allUsers.set(id, userName))
         this.#updateUsersComponent()
     }
+
+    newUserConnected(message) {
+        const user = message;
+        this.#allUsers.set(user.id, user.userName);
+        this.#updateUsersComponent();
+        this.#updateActivityLogComponent(`${user.userName} joined!`);
+    }
+
+    #updateActivityLogComponent(message) {
+        this.componentEmitter.emit(
+            constants.events.app.ACTIVITTLOG_UPDATE,
+            message
+        )  
+    }
+
     #updateUsersComponent() {
         this.componentEmitter.emit(
             constants.events.app.STATUS_UPDATE,

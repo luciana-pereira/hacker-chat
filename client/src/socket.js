@@ -15,6 +15,7 @@ export default class SocketClient {
 
     attachEvents() {
         this.#serverConnection.on('data', data => {
+            try {
                 data
                 .toString()
                 .split('\n')
@@ -23,7 +24,19 @@ export default class SocketClient {
                 .map(({ event, message }) =>  {
                     this.#serverListener.emit(event, message)
                 })
+            } catch (error) {
+                console.log('invalid!', data.toString(), error)
+            }
         })
+        this.#serverConnection.on('end', () => {
+            console.log('I disconnected!!')
+        })
+        this.#serverConnection.on('error', () => {
+            console.error('Ops, aconteceu algo!', error)
+        })
+        for( const [key, value] of events) {
+            this.#serverListener.on(key, value)
+        }
     }
 
     async createConnection() {
