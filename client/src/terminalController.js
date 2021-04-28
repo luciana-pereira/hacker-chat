@@ -1,19 +1,19 @@
 import ComponentsBuilder from "./components.js";
 import { constants } from "./constants.js";
 
-// REsponsabilidade de receber as regras de négocio
+// Responsabilidade de receber as regras de négocio
 export default class TerminalController {
     #usersCollors = new Map()
     constructor () {}
 
-    #pickColor() {
-        return `#` + ((1 << 24) * Math.random() | 0).toString(16) + `-fg`
+    #pickCollor() {
+        return `#${((1 << 24) * Math.random() | 0).toString(16)}-fg`
     }
     #getUserCollor(userName) {
         if(this.#usersCollors.has(userName)) 
             return this.#usersCollors.get(userName)
 
-        const collor = this.#pickColor()
+        const collor = this.#pickCollor()
         this.#usersCollors.set(userName, collor)
 
         return collor
@@ -21,8 +21,8 @@ export default class TerminalController {
 
     #onInputReceived(eventEmitter) {
         return function () {
-            const message = this.getValue()
-            console.log(message)
+            const message = this.getValue();
+            eventEmitter.emit(constants.events.app.MESSAGE_SENT, message)
             this.clearValue()
         }
     }
