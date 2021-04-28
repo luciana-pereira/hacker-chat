@@ -30,9 +30,24 @@ export default class Controller {
             .map(({ id, userName }) => ({ userName, id }))
         this.socketServer
             .sendMessage(user.socket, constants.event.UPDATE_USERS, currentUsers)
-
+        this.broadCast({
+            socketId,
+            roomId,
+            message: { id: socketId, userName: userData.userName },
+            event: constants.event.NEW_USER_CONNECTED,
+        })
 
     }
+    broadCast({ roomId, event, message, socketId, includeCurrentSocket = false }) {
+        const usersOnRoom = this.#rooms.get(roomId)
+
+        for( const [ key, user] of usersOnRoom) {
+            if(!includeCurrentSocket && key === socketId) continue;
+
+            this.socketServer.sendMessage(user.socket, event, message)
+        }
+    }
+
     #joinUserOnRoom(roomId, user) {
         const usersOnRoom = this.#rooms.get(roomId) ?? new Map()
         usersOnRoom.set(user.id, user)
